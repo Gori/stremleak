@@ -3,6 +3,7 @@ dotenv.config();
 
 export default {
     port: process.env.PORT || 7000,
+    publicUrl: process.env.PUBLIC_URL,
     cacheTtl: process.env.CACHE_TTL || 3600, // Still used as fallback
     convexUrl: process.env.CONVEX_URL,
     reddit: {

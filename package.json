@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +19,10 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "next": "^16.0.5",
     "node-cache": "^5.1.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "snoowrap": "^1.23.0",
     "stremio-addon-sdk": "^1.6.10"
   },
@@ -26,5 +31,10 @@
     "ws": "^8.17.1",
     "tmp": "^0.2.3",
     "form-data": "^2.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "@types/react": "19.2.7",
+    "typescript": "5.9.3"
   }
 }

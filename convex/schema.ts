@@ -11,6 +11,7 @@ export default defineSchema({
         redditThumbnail: v.optional(v.string()),
         redditSelftext: v.optional(v.string()),
         redditCreatedUtc: v.number(),
+        redditScore: v.number(), // Reddit upvotes/score
 
         // Stremio metadata
         stremioId: v.string(),
@@ -27,7 +28,8 @@ export default defineSchema({
     })
         .index("by_reddit_id", ["redditId"])
         .index("by_stremio_id", ["stremioId"])
-        .index("by_order", ["orderIndex"]),
+        .index("by_order", ["orderIndex"])
+        .index("by_score", ["redditScore"]),
 
     // Metadata table to track last refresh time
     metadata: defineTable({

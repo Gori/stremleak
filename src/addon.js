@@ -1,5 +1,3 @@
-import sdk from 'stremio-addon-sdk';
-const { addonBuilder } = sdk;
 import { ConvexHttpClient } from 'convex/browser';
 import { api } from '../convex/_generated/api.js';
 import config from './config.js';
@@ -12,34 +10,45 @@ if (config.convexUrl) {
     console.warn('CONVEX_URL not set. Addon will not function properly.');
 }
 
-const manifest = {
+export const manifest = {
     id: 'org.stremio.movieleaks',
     version: '1.0.0',
     name: 'MovieLeaks',
     description: 'Latest leaks from r/MovieLeaks',
+    logo: `${config.publicUrl || 'http://localhost:3000'}/images/logo.webp`,
     resources: ['catalog', 'meta', 'stream'],
     types: ['movie'],
     catalogs: [
         {
             type: 'movie',
             id: 'movieleaks',
-            name: 'MovieLeaks (Reddit)',
+            name: 'Movie Leaks: New',
+            extra: [{ name: 'skip' }]
+        },
+        {
+            type: 'movie',
+            id: 'movieleaks-top-monthly',
+            name: 'Movie Leaks: Top Monthly',
             extra: [{ name: 'skip' }]
         }
     ],
     idPrefixes: ['tt', 'movieleaks:']
 };
 
-const builder = new addonBuilder(manifest);
-
-builder.defineCatalogHandler(async ({ type, id, extra }) => {
-    if (type === 'movie' && id === 'movieleaks') {
+export async function catalogHandler({ type, id, extra }) {
+    if (type === 'movie' && (id === 'movieleaks' || id === 'movieleaks-top-monthly')) {
         if (!convexClient) {
             return { metas: [] };
         }
 
         try {
-            const posts = await convexClient.query(api.queries.getPosts, {});
+            // TODO: Handle extra.skip for pagination if Convex query supports it
+            let posts;
+            if (id === 'movieleaks-top-monthly') {
+                posts = await convexClient.query(api.queries.getTopMonthlyPosts, {});
+            } else {
+                posts = await convexClient.query(api.queries.getPosts, {});
+            }
             return { metas: posts };
         } catch (error) {
             console.error('Error fetching posts from Convex:', error);
@@ -47,10 +56,10 @@ builder.defineCatalogHandler(async ({ type, id, extra }) => {
         }
     }
     return { metas: [] };
-});
+}
 
-builder.defineMetaHandler(async ({ type, id }) => {
-    if (type === 'movie' && id.startsWith('movieleaks:') || id.startsWith('tt')) {
+export async function metaHandler({ type, id }) {
+    if (type === 'movie' && (id.startsWith('movieleaks:') || id.startsWith('tt'))) {
         if (!convexClient) {
             return { meta: {} };
         }
@@ -66,9 +75,9 @@ builder.defineMetaHandler(async ({ type, id }) => {
         }
     }
     return { meta: {} };
-});
+}
 
-builder.defineStreamHandler(async ({ type, id }) => {
+export async function streamHandler({ type, id }) {
     if (type === 'movie' && (id.startsWith('movieleaks:') || id.startsWith('tt'))) {
         if (!convexClient) {
             return { streams: [] };
@@ -96,6 +105,11 @@ builder.defineStreamHandler(async ({ type, id }) => {
         }
     }
     return { streams: [] };
-});
+}
 
-export default builder.getInterface();
+export default {
+    manifest,
+    catalogHandler,
+    metaHandler,
+    streamHandler
+};

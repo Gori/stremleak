@@ -1,7 +1,7 @@
-import { mutation } from "./_generated/server";
+import { mutation, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 
-export const storePosts = mutation({
+export const storePosts = internalMutation({
     args: {
         posts: v.array(v.object({
             redditId: v.string(),
@@ -11,6 +11,7 @@ export const storePosts = mutation({
             redditThumbnail: v.optional(v.string()),
             redditSelftext: v.optional(v.string()),
             redditCreatedUtc: v.number(),
+            redditScore: v.number(),
             stremioId: v.string(),
             name: v.string(),
             type: v.string(),

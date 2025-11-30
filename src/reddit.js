@@ -110,6 +110,7 @@ async function fetchLatestPosts() {
                 redditThumbnail: post.thumbnail,
                 redditSelftext: post.selftext || '',
                 redditCreatedUtc: post.created_utc,
+                redditScore: post.score,
                 stremioId: stremioId,
                 name: cleanTitle,
                 type: 'movie',

@@ -69,3 +69,39 @@ export const getLastRefreshTime = query({
         return metadata?.value || null;
     },
 });
+
+export const getTopMonthlyPosts = query({
+    args: {},
+    handler: async (ctx) => {
+        // Calculate timestamp for 30 days ago
+        const thirtyDaysAgo = Math.floor(Date.now() / 1000) - (30 * 24 * 60 * 60);
+
+        // Get all posts
+        const allPosts = await ctx.db
+            .query("posts")
+            .collect();
+
+        // Filter posts from the past 30 days and sort by score
+        const topMonthlyPosts = allPosts
+            .filter(post => post.redditCreatedUtc >= thirtyDaysAgo)
+            .sort((a, b) => (b.redditScore ?? 0) - (a.redditScore ?? 0));
+
+        return topMonthlyPosts.map(post => ({
+            id: post.stremioId,
+            name: post.name,
+            type: post.type,
+            poster: post.poster,
+            description: post.description,
+            released: post.released,
+            background: post.background,
+            originalPost: {
+                id: post.redditId,
+                title: post.redditTitle,
+                url: post.redditUrl,
+                permalink: post.redditPermalink,
+                thumbnail: post.redditThumbnail,
+                score: post.redditScore,
+            }
+        }));
+    },
+});
