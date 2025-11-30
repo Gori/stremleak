@@ -20,8 +20,22 @@ export default function Home() {
         }}>
             <Head>
                 <title>MovieLeaks</title>
-                <meta name="description" content="Stremio addon for r/MovieLeaks" />
+                <meta name="description" content="The latest leaks from r/MovieLeaks, directly in your Stremio library." />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+                {/* Open Graph / Facebook */}
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://stremleak.vercel.app/" />
+                <meta property="og:title" content="MovieLeaks for Stremio" />
+                <meta property="og:description" content="The latest leaks from r/MovieLeaks, directly in your Stremio library." />
+                <meta property="og:image" content="/images/share.jpg" />
+
+                {/* Twitter */}
+                <meta property="twitter:card" content="summary_large_image" />
+                <meta property="twitter:url" content="https://stremleak.vercel.app/" />
+                <meta property="twitter:title" content="MovieLeaks for Stremio" />
+                <meta property="twitter:description" content="The latest leaks from r/MovieLeaks, directly in your Stremio library." />
+                <meta property="twitter:image" content="/images/share.jpg" />
             </Head>
 
             <main style={{ maxWidth: '600px', width: '100%' }}>
