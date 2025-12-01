@@ -87,7 +87,7 @@ export default function Home() {
                     fontSize: '0.9rem',
                     color: 'var(--secondary-text)'
                 }}>
-                    <a href="https://github.com/oskarsundberg/stremleak" target="_blank" rel="noopener noreferrer" style={{ transition: 'color 0.2s' }} onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-color)'} onMouseOut={(e) => e.currentTarget.style.color = 'var(--secondary-text)'}>Source</a>
+                    <a href="https://github.com/gori/stremleak" target="_blank" rel="noopener noreferrer" style={{ transition: 'color 0.2s' }} onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-color)'} onMouseOut={(e) => e.currentTarget.style.color = 'var(--secondary-text)'}>Source</a>
                     <a href={`${manifestUrl}`} target="_blank" rel="noopener noreferrer" style={{ transition: 'color 0.2s' }} onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-color)'} onMouseOut={(e) => e.currentTarget.style.color = 'var(--secondary-text)'}>Manifest</a>
                 </footer>
             </main>
