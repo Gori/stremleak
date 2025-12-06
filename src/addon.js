@@ -30,13 +30,19 @@ export const manifest = {
             id: 'movieleaks-top-monthly',
             name: 'Movie Leaks: Top Monthly',
             extra: [{ name: 'skip' }]
+        },
+        {
+            type: 'movie',
+            id: 'movieleaks-top-weekly',
+            name: 'Movie Leaks: Top Weekly',
+            extra: [{ name: 'skip' }]
         }
     ],
     idPrefixes: ['tt', 'movieleaks:']
 };
 
 export async function catalogHandler({ type, id, extra }) {
-    if (type === 'movie' && (id === 'movieleaks' || id === 'movieleaks-top-monthly')) {
+    if (type === 'movie' && (id === 'movieleaks' || id === 'movieleaks-top-monthly' || id === 'movieleaks-top-weekly')) {
         if (!convexClient) {
             return { metas: [] };
         }
@@ -46,6 +52,8 @@ export async function catalogHandler({ type, id, extra }) {
             let posts;
             if (id === 'movieleaks-top-monthly') {
                 posts = await convexClient.query(api.queries.getTopMonthlyPosts, {});
+            } else if (id === 'movieleaks-top-weekly') {
+                posts = await convexClient.query(api.queries.getTopWeeklyPosts, {});
             } else {
                 posts = await convexClient.query(api.queries.getPosts, {});
             }

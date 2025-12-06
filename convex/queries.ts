@@ -105,3 +105,39 @@ export const getTopMonthlyPosts = query({
         }));
     },
 });
+
+export const getTopWeeklyPosts = query({
+    args: {},
+    handler: async (ctx) => {
+        // Calculate timestamp for 7 days ago
+        const sevenDaysAgo = Math.floor(Date.now() / 1000) - (7 * 24 * 60 * 60);
+
+        // Get all posts
+        const allPosts = await ctx.db
+            .query("posts")
+            .collect();
+
+        // Filter posts from the past 7 days and sort by score
+        const topWeeklyPosts = allPosts
+            .filter(post => post.redditCreatedUtc >= sevenDaysAgo)
+            .sort((a, b) => (b.redditScore ?? 0) - (a.redditScore ?? 0));
+
+        return topWeeklyPosts.map(post => ({
+            id: post.stremioId,
+            name: post.name,
+            type: post.type,
+            poster: post.poster,
+            description: post.description,
+            released: post.released,
+            background: post.background,
+            originalPost: {
+                id: post.redditId,
+                title: post.redditTitle,
+                url: post.redditUrl,
+                permalink: post.redditPermalink,
+                thumbnail: post.redditThumbnail,
+                score: post.redditScore,
+            }
+        }));
+    },
+});
