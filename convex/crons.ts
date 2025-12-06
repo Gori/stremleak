@@ -5,7 +5,7 @@ const crons = cronJobs();
 
 crons.interval(
     "refresh reddit posts",
-    { hours: 1 }, // Run every hour
+    { minutes: 30 }, // Run every 30 minutes
     internal.actions.refreshRedditPosts
 );
 

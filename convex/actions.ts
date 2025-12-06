@@ -7,11 +7,23 @@ export const refreshRedditPosts = internalAction({
         console.log("Starting Reddit refresh...");
 
         // Call the Node.js backend to fetch fresh data
-        // This endpoint will be created in the addon
-        const addonUrl = process.env.ADDON_REFRESH_URL || "http://localhost:7001/internal/refresh";
+        const addonUrl = process.env.ADDON_REFRESH_URL;
+        const refreshToken = process.env.REFRESH_SECRET_TOKEN;
+
+        console.log("Refresh token exists:", !!refreshToken);
+        console.log("Addon URL:", addonUrl);
+
+        if (!addonUrl) {
+            console.error("ADDON_REFRESH_URL environment variable is not set!");
+            return { success: false, error: "ADDON_REFRESH_URL not configured" };
+        }
 
         try {
-            const response = await fetch(addonUrl);
+            const response = await fetch(addonUrl, {
+                headers: refreshToken ? {
+                    'x-refresh-token': refreshToken
+                } : {}
+            });
 
             if (!response.ok) {
                 console.error("Failed to refresh from Reddit:", response.statusText);

@@ -42,6 +42,11 @@ export default async function handler(req, res) {
         }
 
         if (response) {
+            // Set caching headers
+            // Catalogs update frequently (every 30 mins via cron), so cache for 20 mins
+            // Meta and streams change less often, cache for 1 hour
+            const cacheTime = resource === 'catalog' ? 1200 : 3600;
+            res.setHeader('Cache-Control', `public, max-age=${cacheTime}, stale-while-revalidate=${cacheTime}`);
             res.status(200).json(response);
         } else {
             res.status(404).json({ error: 'Not found' });

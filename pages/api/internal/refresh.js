@@ -7,6 +7,16 @@ export default async function handler(req, res) {
         return;
     }
 
+    // Check for secret token to bypass Vercel deployment protection
+    const authToken = req.headers['x-refresh-token'] || req.query.token;
+    const expectedToken = process.env.REFRESH_SECRET_TOKEN;
+
+    if (expectedToken && authToken !== expectedToken) {
+        console.error('Unauthorized refresh attempt - invalid or missing token');
+        res.status(401).json({ error: 'Unauthorized' });
+        return;
+    }
+
     try {
         console.log('Internal refresh triggered...');
         const posts = await reddit.fetchLatestPosts();
